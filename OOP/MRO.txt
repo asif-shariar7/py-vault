@@ -1,0 +1,110 @@
+Method Resolution Order (MRO) — 
+
+MRO means:
+The order in which Python looks for a method or attribute in inheritance.
+MRO decides which class method runs first when multiple inheritance is involved.
+
+Why MRO is needed ->
+When you call a method:
+obj.method()
+Python must decide:
+Which class’s method() should run first?
+
+This becomes important when multiple inheritance is used.
+
+Example (Single Inheritance)
+class A:
+    def show(self):
+        print("A")
+
+class B(A):
+    pass
+
+obj = B()
+obj.show()
+MRO:
+B → A
+
+Python checks:
+In B. Then in A
+
+Multiple Inheritance Example (Important)
+class A:
+    def show(self):
+        print("A")
+
+class B(A):
+    def show(self):
+        print("B")
+
+class C(A):
+    def show(self):
+        print("C")
+
+class D(B, C):
+    pass
+
+obj = D()
+obj.show()
+MRO:
+D → B → C → A
+Output:
+B
+Python finds show() in B first, so it stops there.
+
+Example with super() (Real Use)
+class A:
+    def show(self):
+        print("A")
+
+class B(A):
+    def show(self):
+        super().show()
+        print("B")
+
+class C(A):
+    def show(self):
+        super().show()
+        print("C")
+
+class D(B, C):
+    def show(self):
+        super().show()
+        print("D")
+
+obj = D()
+obj.show()
+MRO:
+D → B → C → A
+Output:
+A
+C
+B
+D
+super() follows the MRO order step by step
+
+How to Check MRO
+print(D.__mro__)
+
+or
+
+help(D)
+
+Key Points -->
+
+MRO = order Python follows to search methods
+Left → Right (in multiple inheritance)
+super() uses MRO internally
+
+
+## How to check MRO ?
+
+Step 1 - Write MRO. for check -> print(ClassName.__mro__)
+Step 2 - Find super(). Then -> 
+            Rule 1 : super() = go to next class in MRO
+            Rule 2 : print BEFORE super() → prints EARLY (downward). print immediately
+                     print AFTER super() → prints LATE (upward). print when coming back
+            Rule 3 : If a class has no super() → chain stops there         
+Step 3 - Come Back 
+
+Extra - If MRO = C -> B -> A -> obj then start from C,....

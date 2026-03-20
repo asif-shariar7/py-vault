@@ -1,0 +1,4 @@
+
+Hello! I am testing write function
+I love Python
+I am in basic stage
